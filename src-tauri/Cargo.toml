@@ -1,5 +1,5 @@
 [package]
-name = "app"
+name = "cargo2view"
 version = "0.1.0"
 description = "A Tauri App"
 authors = ["you"]
@@ -15,11 +15,15 @@ name = "app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.5.6", features = [] }
+tauri-build = { version = "2.5.4", features = [] }
 
 [dependencies]
+git2 = "0.18"
+tokei = "12.1"
+ignore = "0.4"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
-tauri = { version = "2.10.3", features = [] }
+tauri = { version = "2.10.1", features = [] }
 tauri-plugin-log = "2"
+chrono = "0.4.44"
