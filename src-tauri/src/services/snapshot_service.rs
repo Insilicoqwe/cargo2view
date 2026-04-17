@@ -97,3 +97,24 @@ pub fn load_snapshots(
 
     Ok(result)
 }
+
+pub fn delete_snapshot_by_id(
+    app: &AppHandle,
+    snapshot_id: &str,
+) -> Result<(), String> {
+
+    let mut path: PathBuf = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| e.to_string())?;
+
+    path.push("snapshots");
+    path.push(format!("{snapshot_id}.json"));
+
+    if path.exists() {
+        fs::remove_file(path)
+            .map_err(|e| format!("Failed to delete snapshot: {e}"))?;
+    }
+
+    Ok(())
+}

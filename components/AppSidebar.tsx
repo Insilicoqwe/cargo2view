@@ -5,11 +5,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
-  SidebarGroupLabel,
-  SidebarGroupAction,
-  SidebarGroupContent
 } from "@/components/ui/sidebar"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
@@ -20,11 +16,10 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
 import { loadSnapshots } from "@/lib/loadSnapshots"
+import { deleteSnapshot } from "@/lib/deleteSnapshot";
 import { useRepoStore } from "@/store/useRepoStore"
 import { RepoSnapshot, RepoStats } from "@/types/types"
 
@@ -35,12 +30,14 @@ function splitRepoName(fullName: string): { owner: string; repo: string } {
 
 export function AppSidebar() {
     const setRepo = useRepoStore((s) => s.setRepo);
-    const [snapshots, setSnapshots] = useState<RepoSnapshot[]>([]);
+    const snapshots = useRepoStore((s) => s.snapshots)
+    const setSnapshots = useRepoStore((s) => s.setSnapshots)
+    const removeSnapshot = useRepoStore((s) => s.removeSnapshot)
 
     const refreshSnapshots = useCallback(async () => {
-        const data = await loadSnapshots();
-        setSnapshots(data);
-    }, []);
+        const data = await loadSnapshots()
+        setSnapshots(data)
+    }, [setSnapshots])
 
     useEffect(() => {
         refreshSnapshots();
@@ -69,7 +66,8 @@ export function AppSidebar() {
                                 <ItemDescription className="">{owner}</ItemDescription>
                             </ItemContent>
                             <ItemActions>
-                                <ChevronRight size={16}/>
+                                <Button size="icon" variant="destructive" onClick={async () => { await deleteSnapshot(owner + "-" + repo); removeSnapshot(snapshot.repo_name)}}><Trash2 size={16} /></Button>
+                                {/* <ChevronRight size={16}/> */}
                             </ItemActions>
                         </a>
                     </Item>

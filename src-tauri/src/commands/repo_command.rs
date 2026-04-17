@@ -3,6 +3,7 @@ use crate::domain::repo_stats::RepoStats;
 use crate::services::snapshot_service::load_snapshots;
 use crate::services::snapshot_service::save_snapshot;
 use crate::services::snapshot_service::RepoSnapshot;
+use crate::services::snapshot_service::delete_snapshot_by_id;
 use tauri::AppHandle;
 
 #[tauri::command]
@@ -22,4 +23,13 @@ pub fn get_saved_repos(
 ) -> Result<Vec<RepoSnapshot>, String> {
 
     load_snapshots(&app)
+}
+
+#[tauri::command]
+pub fn delete_snapshot(
+    app: AppHandle,
+    snapshot_id: String,
+) -> Result<(), String> {
+    delete_snapshot_by_id(&app, &snapshot_id)?;
+    Ok(())
 }

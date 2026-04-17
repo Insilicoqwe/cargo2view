@@ -1,18 +1,27 @@
 import { create } from "zustand"
-import { RepoStats } from "@/types/types"
+import { RepoStats, RepoSnapshot } from "@/types/types"
 
 interface RepoState {
   repo?: RepoStats
+  snapshots: RepoSnapshot[]
+
   loading: boolean
   error?: string
 
   setRepo: (repo: RepoStats) => void
+  resetRepo: () => void
+
+  setSnapshots: (snapshots: RepoSnapshot[]) => void
+  removeSnapshot: (repoName: string) => void
+
   setLoading: (value: boolean) => void
   setError: (error?: string) => void
 }
 
-export const useRepoStore = create<RepoState>((set) => ({
+export const useRepoStore = create<RepoState>((set, get) => ({
   repo: undefined,
+  snapshots: [],
+
   loading: false,
   error: undefined,
 
@@ -20,6 +29,31 @@ export const useRepoStore = create<RepoState>((set) => ({
     set({
       repo,
       loading: false
+    }),
+
+  resetRepo: () =>
+    set({
+      repo: undefined
+    }),
+
+  setSnapshots: (snapshots) =>
+    set({
+      snapshots
+    }),
+
+  removeSnapshot: (repoName) =>
+    set((state) => {
+      const updatedSnapshots = state.snapshots.filter(
+        (snapshot) => snapshot.repo_name !== repoName
+      )
+
+      const shouldResetRepo =
+        state.repo?.repo_slug === repoName
+
+      return {
+        snapshots: updatedSnapshots,
+        repo: shouldResetRepo ? undefined : state.repo
+      }
     }),
 
   setLoading: (loading) =>
