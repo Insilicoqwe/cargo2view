@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cargo2View
+
+Cargo2View is a desktop application for automated analysis of Git repositories with visualization of key project structure metrics, development activity, and codebase quality indicators.
+
+The application is built using a hybrid architecture:
+
+- Rust backend
+- TypeScript frontend
+- Tauri for cross-platform desktop delivery
+
+## Features
+
+Cargo2View allows users to:
+
+- clone remote Git repositories
+- analyze project structure
+- compute statistical code metrics
+- visualize programming language distribution
+- analyze contributor activity
+- save analysis snapshots
+- reload saved snapshots
+- delete snapshots
+
+## Tech Stack
+
+Backend:
+
+- Rust
+- Tauri
+- Git CLI
+
+Frontend:
+
+- React
+- TypeScript
+- Zustand
+- shadcn/ui
+- Recharts
+- Lucide Icons
+
+## Architecture Overview
+
+The application follows a layered responsibility separation between frontend and backend.
+
+Rust backend modules:
+
+- `git` — repository cloning
+- `analysis` — metrics computation
+- `services` — business logic and snapshot processing
+- `commands` — Tauri command interface for frontend communication
+
+Frontend responsibilities:
+
+- metrics visualization
+- global state management with Zustand
+- communication with backend via Tauri API
+
+## Collected Metrics
+
+Cargo2View analyzes:
+
+- number of files
+- lines of code
+- repository size
+- number of commits
+- number of branches
+- number of contributors
+- language distribution
+- average file size
+- average commit size
+- commit frequency
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+curl https://sh.rustup.rs -sSf | sh
+rustc --version
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tauri system dependencies (Linux only)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Arch
+```bash
+sudo pacman -S base-devel webkit2gtk gtk3
+```
+Ubuntu / Debian
+```bash
+sudo apt install build-essential \
+libwebkit2gtk-4.1-dev \
+libgtk-3-dev \
+libayatana-appindicator3-dev \
+librsvg2-dev
+```
